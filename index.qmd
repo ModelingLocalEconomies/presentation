@@ -1,0 +1,151 @@
+---
+title: "Modeling Local Economies"
+author:
+  - "Michael"
+  - "Raseen"
+  - "James"
+format: 
+  revealjs:
+    smaller: true
+    scrollable: true
+---
+
+# Introduction
+
+:::: {.columns}
+
+::: {.column}
+What effect do music concert tours have on the local economy?
+
+- Recent **Taylor Swift** and **Beyoncé** tours suggest that large concert tours have a **significant impact on the local economy** through ticket sales, hotel bookings, etc.
+
+- We hypothesize that, because of this economic impact, we can **use concert attendance to model local macroeconomic trends** (e.g. GDP)
+:::
+
+::: {.column}
+![](northeasternGlobal.png)
+![](fedRes.png)
+:::
+
+::::
+
+# Project Goals
+
+1. Use concert attendance and revenue data to __predict GDP growth__ in the state where the concert occurred
+2. Use Twitter data about concert tours to __predict concert attendance__ in advance
+
+# Related Works
+
+- [Claveria and Torra (2021)](https://www.sciencedirect.com/science/article/abs/pii/S0264999320311998) predict GDP of European countries using business and consumer sentiment data
+- [Glaesar et al. (2017)](https://www.nber.org/system/files/chapters/c14276/revisions/c14276.rev1.pdf) use crowd-sourced Yelp data to measure economic output of local businesses
+- [Kreindler and Miyauchi (2021)](https://www.bu.edu/econ/files/2021/02/Kreindler-and-Miyauchi-2021.pdf) leverage cell phone location data to map centers of high economic activity
+
+# Methodology
+
+![](methodology.png)
+
+
+# Data
+
+:::: {.columns}
+
+::: {.column}
+**Economic Data**
+
+- __State-by-state quarterly GDP data__ from the Bureau of Economic Analysis
+  - Manually calculate quarter-over-quarter GDP growth
+:::
+
+::: {.column}
+**Concert Data**
+
+- __Concert attendance and revenue data__ for 8 high-grossing concert tours from the 2010s from [Wikipedia](https://en.wikipedia.org/wiki/List_of_highest-grossing_concert_tours) (n = 453)
+- __Google Trends search data__ by state for each artist over a 5 year span
+:::
+
+::::
+
+# Google Trends
+
+## Problem
+
+:::: {.columns}
+::: {.column}
+![](googTrendsPink.png)
+:::
+::: {.column}
+![](googTrendsPinkandEd.png)
+:::
+::::
+
+Problem: Google Treds data is relative, not absolute
+
+## Solution
+
+![](googNorm.png)
+
+Solution: Normalize relative values by a common search denominator
+
+# Preliminary Findings
+
+## GDP Growth Prediction
+
+:::: {.columns}
+
+::: {.column}
+![](rev_vs_gdp.JPG)
+:::
+
+::: {.column}
+![](with_without_concerts.PNG)
+:::
+
+::::
+
+## Attendance Revenue Prediction
+
+:::: {.columns}
+
+::: {.column}
+![](trend_vs_rev.PNG)
+:::
+
+::: {.column}
+![](prev_trend_vs_rev.PNG)
+:::
+
+::::
+
+
+# Models
+
+## Bagging Regressor
+
+- Using linear regression as base learners
+- In terms of training error, performed about the same as the neural networks at a RMSE of 0.755 when predicting GDP growth from trend data
+
+## Neural Netowrks
+
+- Feed forward design
+- Numerous configurations tested, out of these a 4 layer network performed the best
+- More sophisticated than the bagging regressor and with a root mean squared training error of 0.753 when predicting GDP growth from trend data
+
+# Limitations
+
+- __Data Granularity__: We were limited to GDP data on a state level and on a quarterly time scale
+  - It is difficult to determine just how much of an impact the concerts had on GDP growth versus general business cycle shifts
+
+- __Training Data Size__: We limited our concert data to large-scale concert tours between 2015 and 2019 with available attendance and revenue figures (8 concerts)
+
+- __Confounding Factors__: Our research problem lends itself to numerous confounding factors that are difficult to disentangle:
+  - Do the concerts actually add economic impact beyond what would otherwise be expected?
+  - e.g. most concerts happen in the summer (Q3)
+
+- __Google Trends vs. Twitter__: We originally wanted to use NLP on tweets to extract more fine-grained data
+
+# Opportunities for Future Work
+
+- __Testing Hypothesis on Post-Pandemic Concerts__: We hope to use the Taylor Swift and Beyoncé concert tours as a test set for our models. We postulate that worldwide concert tours after 2020 might have a greater impact on economic trends as economies recover, and concerts stimulate a more disproportionate level of consumer spending compared to before 2020.
+
+- __Additional/Different Trend Data Sources__: Given that tweets provide hyper-local data (e.g. geotags) and a larger quantity of individual data points, better matches between tweet activity and concert attendance can be expected.
+
