@@ -8,6 +8,7 @@ format:
   revealjs:
     smaller: true
     scrollable: true
+    controls: true
 ---
 
 # Introduction
